@@ -9,9 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.internal.TargetInfo;
 
 import java.util.ArrayList;
 import java.util.List;
