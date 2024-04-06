@@ -39,7 +39,7 @@ public class Main extends Application {
         Rectangle middle = RECTANGLES[2][RECTANGLES[0].length/2];// sprawdzenie
         Color current = Piece.chooseColor();
         middle .setFill(current);
-        Piece.create(middle,current,5);
+        Piece.create(middle,current,4);
 
 
         primaryStage.setScene(scene);
