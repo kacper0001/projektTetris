@@ -2,6 +2,9 @@ package tetris;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.util.List;
+
 import static tetris.Main.*;
 
 
@@ -18,6 +21,7 @@ public class Piece extends Rectangle {
                         if (random == 1  && r - 1 >=0 ) {
                             RECTANGLES[r-1][c].setFill(current);
                             middle = RECTANGLES[r-1][c];
+                            PIECES.add(middle);
                             if (count-- >0) {
                                 create(middle, current, count--);
                             }
@@ -28,6 +32,7 @@ public class Piece extends Rectangle {
                         else if (random == 2 && r + 1 < HEIGHT/SIZE) {
                             RECTANGLES[r+1][c].setFill(current);
                             middle = RECTANGLES[r+1][c];
+                            PIECES.add(middle);
                             if(count-->0) {
                                 create(middle, current, count--);
                             }
@@ -40,6 +45,7 @@ public class Piece extends Rectangle {
                         else if (random ==3 && c +1 < WIDTH/SIZE) {
                             RECTANGLES[r][c + 1].setFill(current);
                             middle = RECTANGLES[r][c + 1];
+                            PIECES.add(middle);
                             if (count-- > 0){
                                 create(middle, current, count--);
                         }
@@ -51,6 +57,7 @@ public class Piece extends Rectangle {
                         else if (random ==4 && c - 1 > 0) {
                             RECTANGLES[r][c-1].setFill(current);
                             middle = RECTANGLES[r][c-1];
+                            PIECES.add(middle);
                             if ( count-- >0) {
                                 create(middle, current, count--);
                             }
@@ -91,6 +98,30 @@ public class Piece extends Rectangle {
             }
 
             return color;
+        }
+
+        public static void move(List<Rectangle> pieces){
+            for (int r =0; r < HEIGHT/SIZE; r ++) {
+                for (int c = 0; c < WIDTH / SIZE; c++) {
+                    Rectangle current = RECTANGLES[r][c];
+                    for (int i = 0; i < pieces.size(); i++) {
+                        Rectangle piecePart = pieces.get(i);
+                        if(current != piecePart){
+                            continue;
+                        }
+                        else if(current == piecePart&& r+1 < HEIGHT/SIZE){
+                            Rectangle rectangle = new Rectangle(SIZE,SIZE,Color.BLACK);
+                            RECTANGLES[r][c]= rectangle;
+                            RECTANGLES[r+1][c].setFill(CURRENT);
+                            pieces.add(i,RECTANGLES[r+1][c]);
+
+                        }
+
+
+                    }
+                }
+            }
+
         }
     }
 

@@ -8,13 +8,17 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main extends Application {
      public static int HEIGHT =1000;
      public static int WIDTH = 500;
      public static int SIZE = 20;
     public static GridPane ROOT = new GridPane();
     public static Rectangle [][] RECTANGLES = new Rectangle[HEIGHT/SIZE][WIDTH/SIZE];
-
+    public static List<Rectangle> PIECES = new ArrayList<>();
+    public static Color CURRENT = Piece.chooseColor();
 
 
     public static void main(String[] args) {
@@ -37,9 +41,11 @@ public class Main extends Application {
         }
 
         Rectangle middle = RECTANGLES[2][RECTANGLES[0].length/2];// sprawdzenie
-        Color current = Piece.chooseColor();
-        middle .setFill(current);
-        Piece.create(middle,current,4);
+        middle .setFill(CURRENT);
+        PIECES.add(middle);
+        Piece.create(middle,CURRENT,4);
+
+        Piece.move(PIECES);
 
 
         primaryStage.setScene(scene);
