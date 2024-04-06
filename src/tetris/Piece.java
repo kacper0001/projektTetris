@@ -104,18 +104,17 @@ public class Piece extends Rectangle {
             for (int r =0; r < HEIGHT/SIZE; r ++) {
                 for (int c = 0; c < WIDTH / SIZE; c++) {
                     Rectangle current = RECTANGLES[r][c];
-                    for (int i = 0; i < pieces.size(); i++) {
-                        Rectangle piecePart = pieces.get(i);
-                        if(current != piecePart){
-                            continue;
-                        }
-                        else if(current == piecePart&& r+1 < HEIGHT/SIZE){
-                            Rectangle rectangle = new Rectangle(SIZE,SIZE,Color.BLACK);
-                            RECTANGLES[r][c]= rectangle;
+                        Rectangle piecePart = pieces.get(r);
+                        if(current == piecePart && r+1 < HEIGHT/SIZE){
+                            RECTANGLES[r][c].setFill(Color.BLUE);
                             RECTANGLES[r+1][c].setFill(CURRENT);
-                            pieces.add(i,RECTANGLES[r+1][c]);
+                            pieces.set(r, RECTANGLES[r+1][c]);
 
-                        }
+                            move(pieces);
+
+                            }
+
+
 
 
                     }
@@ -123,6 +122,6 @@ public class Piece extends Rectangle {
             }
 
         }
-    }
+
 
 
