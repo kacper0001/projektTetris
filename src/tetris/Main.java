@@ -52,8 +52,8 @@ public class Main extends Application {
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10),event -> {
            if(PIECES.isEmpty()!=false){
-               Piece.move(PIECES);
-           }
+               Piece.moveDown(PIECES);
+          }
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
