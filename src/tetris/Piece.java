@@ -6,20 +6,22 @@ import javafx.scene.shape.Rectangle;
 import jdk.nashorn.api.tree.ForInLoopTree;
 import jdk.nashorn.api.tree.WhileLoopTree;
 
-import java.util.List;
-import java.util.Objects;
+import java.rmi.RMISecurityException;
+import java.util.*;
 
 import static tetris.Main.*;
 import static tetris.Type.*;
 
 
 public class Piece extends Rectangle {
-    int r,c;
+    int r, c;
     Type type;
     public static Color CURRENT = Piece.chooseColor();
 
     public Piece(Type type, int r, int c) {
-        super(r,c, SIZE, SIZE);
+        super(r, c, SIZE, SIZE);
+        this.r = r;
+        this.c = c;
         setType(type);
     }
 
@@ -28,110 +30,62 @@ public class Piece extends Rectangle {
         if (type == Type.EMPTY) {
             setFill(Color.BLACK);
         }
-        if(type == PIECE){
+        if (type == PIECE) {
             setFill(CURRENT);
         }
 
 
     }
-    public static void create(Piece middle, Color current, int count) { // tworzy piece (count to ilość kwadratów która ma być w jednym piece)--> błąd is here!!!!
-        for (int r =0; r < HEIGHT/SIZE; r ++) {
-            for (int c = 0; c < WIDTH/SIZE; c ++) {
-                if(PIECES_A[r][c] == middle) {
-                    int random = (int) (Math.random() *4);
 
-                    if (random == 1  && r - 1 >=0 ) {
-                        PIECES_A[r-1][c].setFill(current);
-                        middle = PIECES_A[r-1][c];
-                        PIECES.add(middle);
-                        if (count-- >0) {
-                            create(middle, current, count--);
-                        }
-                        else {
-                            return;
-                        }
-                    }
-                    else if (random == 2 && r + 1 < HEIGHT/SIZE) {
-                        PIECES_A[r+1][c].setFill(current);
-                        middle = PIECES_A[r+1][c];
-                        PIECES.add(middle);
-                        if(count-->0) {
-                            create(middle, current, count--);
-                        }
-                        else {
-                            return;
-                        }
-
-
-                    }
-                    else if (random ==3 && c +1 < WIDTH/SIZE) {
-                        PIECES_A[r][c + 1].setFill(current);
-                        middle = PIECES_A[r][c + 1];
-                        PIECES.add(middle);
-                        if (count-- > 0){
-                            create(middle, current, count--);
-                        }
-                        else {
-                            return;
-                        }
-
-                    }
-                    else if (random ==4 && c - 1 > 0) {
-                        PIECES_A[r][c-1].setFill(current);
-                        middle = PIECES_A[r][c-1];
-                        PIECES.add(middle);
-                        if ( count-- >0) {
-                            create(middle, current, count--);
-                        }
-                        else {
-                            return;
-                        }
-
-                    }
-                    else {
-                        if(count-->0) {
-                            create(middle, current, count--);
-                        }
-                        else {
-                            return;
-                        }
-
-                    }
-                }
-            }
-
-
+    public static void create(Piece middle, Color current, int count) {// tworzy piece (count to ilość kwadratów która ma być w jednym piece)--> błąd is here!!!!
+        if (count == 0) {
+            return;
         }
-        System.out.println(PIECES.size());
-
+        int random = (int) (Math.random() * 4);
+        List<Piece> free = new ArrayList<>();
+        if (middle.r + 1 < PIECES_A.length && PIECES_A[middle.r + 1][middle.c].type == EMPTY) {
+            free.add(PIECES_A[middle.r + 1][middle.c]);
+        }
+        if (middle.r - 1 >= 0 && PIECES_A[middle.r - 1][middle.c].type == EMPTY) {
+            free.add(PIECES_A[middle.r - 1][middle.c]);
+        }
+        if (middle.c - 1 >= 0 && PIECES_A[middle.r][middle.c - 1].type == EMPTY) {
+            free.add(PIECES_A[middle.r][middle.c - 1]);
+        }
+        if (middle.c + 1 < PIECES_A[0].length && PIECES_A[middle.r][middle.c + 1].type == EMPTY) {
+            free.add(PIECES_A[middle.r][middle.c + 1]);
+        }
+        Collections.shuffle(free);
+        Piece next = free.get(0);
+        next.setType(PIECE);
+        PIECES.add(next);
+        create(next, CURRENT, count - 1);
 
     }
+
     public static void moveDown(List<Piece> pieces) {
         boolean canFall = true;
 
-            for (int i = 0; i < pieces.size(); i++) {
+        for (int i = 0; i < pieces.size(); i++) {
+            Piece piece = pieces.get(i);
+            if (piece.r + 1 >= HEIGHT / SIZE) {
+                canFall = false;
+            }
+            if (piece.r + 1 < HEIGHT / SIZE && PIECES_A[piece.r + 1][piece.c].type == FALLEN) {
+                canFall = false;
+            }
+        }
 
-                Piece piece = pieces.get(i);
-                if (piece.r >= HEIGHT / SIZE) {
-                    canFall = false;
-                }
-                if (piece.r < HEIGHT / SIZE && PIECES_A[piece.r + 1][piece.c].type == FALLEN) {
-                    canFall=false;
-                }
+        if (canFall == true) {
+            pieces.sort(Comparator.comparingInt(value -> value.r));
+            for (int i = pieces.size() - 1; i >= 0; i--) {
+                PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(EMPTY);
+                pieces.get(i).r++;
+                PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(PIECE);
             }
 
-        if(canFall== true) {
-            for (int i = 0; i < pieces.size(); i++) {
-                Piece newPiece = new Piece(PIECE, pieces.get(i).r + 1, pieces.get(i).c);
-               /* pieces.remove(pieces.get(i));
-                pieces.add(i, newPiece);*/
-                System.out.println(pieces.size());
-            }
+        }
 
-            }
-
-
-        draw(pieces);
 
     }
 
@@ -157,36 +111,19 @@ public class Piece extends Rectangle {
 
         return color;
     }
+
+
+    public static void moveLeft(List<Rectangle> pieces) {
+
+    }
+
+    public static void moveRight(List<Rectangle> pieces) {
+
+    }
 }
 
 
-    /*
 
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Piece piece = (Piece) o;
-        return r == piece.r && c == piece.c;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(r, c);
-    }
-
-
-    public static void moveLeft (List<Rectangle> pieces){
-
-    }
-    public static void moveRight (List<Rectangle> pieces){
-
-    }
-
-}
-*/
 
 
 
