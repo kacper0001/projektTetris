@@ -50,14 +50,15 @@ public class Main extends Application {
 
         Piece middle = PIECES_A[2][PIECES_A[0].length/2];// sprawdzenie
         middle.setType(PIECE);
+        PIECES.add(middle);
         Piece.create(middle,CURRENT,4);
 
 
 
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10),event -> {
-           if(PIECES.isEmpty()!=false){
-               Piece.moveDown(PIECES);
+       Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10),event -> {
+           if(PIECES.isEmpty()!= true){
+              // Piece.moveDown(PIECES);
           }
         }));
         timeline.setCycleCount(Animation.INDEFINITE);

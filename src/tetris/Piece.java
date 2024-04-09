@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import jdk.nashorn.api.tree.ForInLoopTree;
+import jdk.nashorn.api.tree.WhileLoopTree;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,7 +34,7 @@ public class Piece extends Rectangle {
 
 
     }
-    public static void create(Piece middle, Color current, int count) { // tworzy piece (count to ilość kwadratów która ma być w jednym piece)
+    public static void create(Piece middle, Color current, int count) { // tworzy piece (count to ilość kwadratów która ma być w jednym piece)--> błąd is here!!!!
         for (int r =0; r < HEIGHT/SIZE; r ++) {
             for (int c = 0; c < WIDTH/SIZE; c ++) {
                 if(PIECES_A[r][c] == middle) {
@@ -101,32 +102,42 @@ public class Piece extends Rectangle {
 
 
         }
+        System.out.println(PIECES.size());
+
+
     }
     public static void moveDown(List<Piece> pieces) {
         boolean canFall = true;
 
             for (int i = 0; i < pieces.size(); i++) {
+
                 Piece piece = pieces.get(i);
-                if (piece.r <= HEIGHT / SIZE) {
+                if (piece.r >= HEIGHT / SIZE) {
                     canFall = false;
                 }
                 if (piece.r < HEIGHT / SIZE && PIECES_A[piece.r + 1][piece.c].type == FALLEN) {
                     canFall=false;
                 }
-                if(canFall== true) {
-                    pieces.remove(piece);
-                    pieces.add(PIECES_A[piece.r + 1][piece.c]);
-                    draw(pieces);
-
-
-                }
             }
+
+        if(canFall== true) {
+            for (int i = 0; i < pieces.size(); i++) {
+                Piece newPiece = new Piece(PIECE, pieces.get(i).r + 1, pieces.get(i).c);
+               /* pieces.remove(pieces.get(i));
+                pieces.add(i, newPiece);*/
+                System.out.println(pieces.size());
+            }
+
+            }
+
+
+        draw(pieces);
 
     }
 
     private static void draw(List<Piece> pieces) {
         for (int i = 0; i < pieces.size(); i++) {
-        pieces.get(i).setType(PIECE);
+            pieces.get(i).setFill(CURRENT);
 
         }
     }
