@@ -14,14 +14,19 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import static tetris.Piece.*;
+import static tetris.Type.*;
+
+
 public class Main extends Application {
      public static int HEIGHT =1000;
      public static int WIDTH = 500;
      public static int SIZE = 20;
     public static GridPane ROOT = new GridPane();
-    public static Rectangle [][] RECTANGLES = new Rectangle[HEIGHT/SIZE][WIDTH/SIZE];
-    public static List<Rectangle> PIECES = new ArrayList<>();
-    public static Color CURRENT = Piece.chooseColor();
+    public static Piece [][] PIECES_A = new Piece[HEIGHT/SIZE][WIDTH/SIZE];
+    public static List<Piece> PIECES = new ArrayList<>();
+
+    public static Type CURRENT_TYPE = EMPTY;
 
 
     public static void main(String[] args) {
@@ -36,17 +41,17 @@ public class Main extends Application {
 
         for (int r = 0; r <HEIGHT/SIZE ; r++) {
             for (int c = 0; c <WIDTH/SIZE; c++) {
-                Rectangle rectangle = new Rectangle(SIZE,SIZE, Color.BLACK);
-                RECTANGLES[r][c] = rectangle;
+                Piece rectangle = new Piece(CURRENT_TYPE,r, c);
+                PIECES_A[r][c] = rectangle;
                 ROOT.add(rectangle, c*SIZE, r*SIZE);
             }
 
         }
 
-        Rectangle middle = RECTANGLES[2][RECTANGLES[0].length/2];// sprawdzenie
-        middle .setFill(CURRENT);
-        PIECES.add(middle);
+        Piece middle = PIECES_A[2][PIECES_A[0].length/2];// sprawdzenie
+        middle.setType(PIECE);
         Piece.create(middle,CURRENT,4);
+
 
 
 
@@ -65,4 +70,5 @@ public class Main extends Application {
 
 
     }
-}
+
+    }
