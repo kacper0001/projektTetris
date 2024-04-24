@@ -7,8 +7,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -57,7 +55,7 @@ public class Main extends Application {
 
 
 
-       Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100),event -> {
+       Timeline timeline = new Timeline(new KeyFrame(Duration.millis(200),event -> {
            if(PIECES.isEmpty()!= true){
               Piece.moveDown(PIECES);
           }
@@ -66,10 +64,19 @@ public class Main extends Application {
         timeline.play();
 
         scene.setOnKeyPressed(event -> {
+            if (event.getCode()==KeyCode.RIGHT) {
+                moveRight(PIECES);
+            }
             if (event.getCode()==KeyCode.LEFT){
                 moveLeft(PIECES);
             }
+
         });
+
+
+
+
+
 
 
         primaryStage.setScene(scene);

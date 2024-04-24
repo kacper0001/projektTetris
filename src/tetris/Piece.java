@@ -36,7 +36,6 @@ public class Piece extends Rectangle {
         if (count == 0) {
             return;
         }
-        int random = (int) (Math.random() * 4);
         List<Piece> free = new ArrayList<>();
         if (middle.r + 1 < PIECES_A.length && PIECES_A[middle.r + 1][middle.c].type == EMPTY) {
             free.add(PIECES_A[middle.r + 1][middle.c]);
@@ -116,14 +115,14 @@ public class Piece extends Rectangle {
             if (piece.c -1 < 0) {
                 canMove = false;
             }
-            if (piece.r -1 >= 0 && PIECES_A[piece.r][piece.c - 1].type == FALLEN) {
+            if (piece.c -1 >= 0 && PIECES_A[piece.r][piece.c - 1].type == FALLEN) {
                 canMove = false;
             }
         }
 
         if (canMove == true) {
-            pieces.sort(Comparator.comparingInt(value -> value.r));
-            for (int i = pieces.size() - 1; i >= 0; i--) {
+            pieces.sort(Comparator.comparingInt(value -> value.c));
+            for (int i = 0; i< pieces.size(); i++) {
                 PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(EMPTY);
                 pieces.get(i).c--;
                 PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(PIECE);
@@ -136,7 +135,29 @@ public class Piece extends Rectangle {
 
     }
 
-    public static void moveRight(List<Rectangle> pieces) {
+    public static void moveRight(List<Piece> pieces) {
+        boolean canMove = true;
+
+        for (int i = 0; i < pieces.size(); i++) {
+            Piece piece = pieces.get(i);
+            if (piece.c +1 >= PIECES_A[0].length) {
+                canMove = false;
+
+            }
+            if (piece.c +1 < PIECES_A[0].length && PIECES_A[piece.r][piece.c + 1].type == FALLEN) {
+                canMove = false;
+            }
+        }
+
+        if (canMove == true) {
+            pieces.sort(Comparator.comparingInt(value -> value.c));
+            for (int i = pieces.size() - 1; i >= 0; i--) {
+                PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(EMPTY);
+                pieces.get(i).c++;
+                PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(PIECE);
+            }
+
+        }
 
     }
 }
