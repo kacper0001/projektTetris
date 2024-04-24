@@ -115,6 +115,7 @@ public class Piece extends Rectangle {
 
     public static void moveLeft(List<Rectangle> pieces) {
 
+
     }
 
     public static void moveRight(List<Rectangle> pieces) {
