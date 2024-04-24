@@ -64,24 +64,47 @@ public class Piece extends Rectangle {
             Piece piece = pieces.get(i);
             if (piece.r + 1 >= HEIGHT / SIZE) {
                 canFall = false;
+                for (int j = 0; j < pieces.size(); j++) {
+                    pieces.get(i).setType(FALLEN);
+                    PIECES = new LinkedList<>();
+                    Piece newMiddle = new Piece(PIECE, 2, PIECES_A[0].length / 2);
+                    PIECES.add(newMiddle);
+                    Color newColor = chooseColor();
+                    CURRENT = newColor;
+                    Piece.create(newMiddle, CURRENT, 4);
+                    return;
+
+                }
             }
             if (piece.r + 1 < HEIGHT / SIZE && PIECES_A[piece.r + 1][piece.c].type == FALLEN) {
                 canFall = false;
+                for (int j = 0; j < pieces.size(); j++) {
+                    pieces.get(i).setType(FALLEN);
+                    PIECES = new LinkedList<>();
+                    Piece newMiddle = new Piece(PIECE, 2, PIECES_A[0].length / 2);
+                    PIECES.add(newMiddle);
+                    Color newColor = chooseColor();
+                    CURRENT = newColor;
+                    Piece.create(newMiddle, CURRENT, 4);
+                    return;
+
+                }
+
             }
         }
 
-        if (canFall == true) {
-            pieces.sort(Comparator.comparingInt(value -> value.r));
-            for (int i = pieces.size() - 1; i >= 0; i--) {
-                PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(EMPTY);
-                pieces.get(i).r++;
-                PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(PIECE);
+            if (canFall == true) {
+                pieces.sort(Comparator.comparingInt(value -> value.r));
+                for (int i = pieces.size() - 1; i >= 0; i--) {
+                    PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(EMPTY);
+                    pieces.get(i).r++;
+                    PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(PIECE);
+                }
+
             }
 
+
         }
-
-
-    }
 
     private static void draw(List<Piece> pieces) {
         for (int i = 0; i < pieces.size(); i++) {

@@ -47,9 +47,7 @@ public class Main extends Application {
 
         }
 
-        Piece middle = PIECES_A[2][PIECES_A[0].length/2];// sprawdzenie
-        middle.setType(PIECE);
-        PIECES.add(middle);
+        Piece middle = new Piece(PIECE, 2, PIECES_A[0].length/2);
         Piece.create(middle,CURRENT,4);
 
 
