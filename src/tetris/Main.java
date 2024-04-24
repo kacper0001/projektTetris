@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -63,6 +64,12 @@ public class Main extends Application {
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode()==KeyCode.LEFT){
+                moveLeft(PIECES);
+            }
+        });
 
 
         primaryStage.setScene(scene);

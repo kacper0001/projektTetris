@@ -1,12 +1,7 @@
 package tetris;
 
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import jdk.nashorn.api.tree.ForInLoopTree;
-import jdk.nashorn.api.tree.WhileLoopTree;
-
-import java.rmi.RMISecurityException;
 import java.util.*;
 
 import static tetris.Main.*;
@@ -113,7 +108,30 @@ public class Piece extends Rectangle {
     }
 
 
-    public static void moveLeft(List<Rectangle> pieces) {
+    public static void moveLeft(List<Piece> pieces) {
+        boolean canMove = true;
+
+        for (int i = 0; i < pieces.size(); i++) {
+            Piece piece = pieces.get(i);
+            if (piece.c -1 < 0) {
+                canMove = false;
+            }
+            if (piece.r -1 >= 0 && PIECES_A[piece.r][piece.c - 1].type == FALLEN) {
+                canMove = false;
+            }
+        }
+
+        if (canMove == true) {
+            pieces.sort(Comparator.comparingInt(value -> value.r));
+            for (int i = pieces.size() - 1; i >= 0; i--) {
+                PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(EMPTY);
+                pieces.get(i).c--;
+                PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(PIECE);
+            }
+
+        }
+
+
 
 
     }
