@@ -7,10 +7,12 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static tetris.Piece.*;
@@ -47,16 +49,17 @@ public class Main extends Application {
 
         }
 
-        Piece middle = new Piece(PIECE, 2, PIECES_A[0].length/2);
-        Piece.create(middle,CURRENT,4);
 
 
 
+       Timeline timeline = new Timeline(new KeyFrame(Duration.millis(300),event -> {
 
-       Timeline timeline = new Timeline(new KeyFrame(Duration.millis(200),event -> {
            if(PIECES.isEmpty()!= true){
               Piece.moveDown(PIECES);
           }
+           else {
+               generate();
+           }
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();

@@ -66,29 +66,16 @@ public class Piece extends Rectangle {
                 canFall = false;
                 for (int j = 0; j < pieces.size(); j++) {
                     pieces.get(i).setType(FALLEN);
-                    PIECES = new LinkedList<>();
-                    Piece newMiddle = new Piece(PIECE, 2, PIECES_A[0].length / 2);
-                    PIECES.add(newMiddle);
-                    Color newColor = chooseColor();
-                    CURRENT = newColor;
-                    Piece.create(newMiddle, CURRENT, 4);
-                    return;
-
                 }
+                PIECES.clear();
             }
             if (piece.r + 1 < HEIGHT / SIZE && PIECES_A[piece.r + 1][piece.c].type == FALLEN) {
                 canFall = false;
                 for (int j = 0; j < pieces.size(); j++) {
                     pieces.get(i).setType(FALLEN);
-                    PIECES = new LinkedList<>();
-                    Piece newMiddle = new Piece(PIECE, 2, PIECES_A[0].length / 2);
-                    PIECES.add(newMiddle);
-                    Color newColor = chooseColor();
-                    CURRENT = newColor;
-                    Piece.create(newMiddle, CURRENT, 4);
-                    return;
-
                 }
+                PIECES.clear();
+
 
             }
         }
@@ -181,6 +168,16 @@ public class Piece extends Rectangle {
             }
 
         }
+
+    }
+
+    public static void generate(){
+            Piece newMiddle = new Piece(PIECE, 2, PIECES_A[0].length / 2);
+            PIECES.add(newMiddle);
+            Color newColor = chooseColor();
+            CURRENT = newColor;
+            Piece.create(newMiddle, CURRENT, 4);
+
 
     }
 }
