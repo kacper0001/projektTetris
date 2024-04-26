@@ -49,30 +49,33 @@ public class Piece extends Rectangle {
         if (middle.c + 1 < PIECES_A[0].length && PIECES_A[middle.r][middle.c + 1].type == EMPTY) {
             free.add(PIECES_A[middle.r][middle.c + 1]);
         }
-        Collections.shuffle(free);
-        Piece next = free.get(0);
-        next.setType(PIECE);
-        PIECES.add(next);
-        create(next, CURRENT, count - 1);
-
+        if(!PIECES.isEmpty()) {
+            Collections.shuffle(free);
+            Piece next = free.get(0);
+            next.setType(PIECE);
+            PIECES.add(next);
+            create(next, CURRENT, count - 1);
+        }
     }
 
     public static void moveDown(List<Piece> pieces) {
         boolean canFall = true;
-
         for (int i = 0; i < pieces.size(); i++) {
             Piece piece = pieces.get(i);
             if (piece.r + 1 >= HEIGHT / SIZE) {
                 canFall = false;
                 for (int j = 0; j < pieces.size(); j++) {
-                    pieces.get(i).setType(FALLEN);
+                    pieces.get(j).setType(FALLEN);
+                    PIECES.remove(pieces.get(j));
+
                 }
                 PIECES.clear();
             }
             if (piece.r + 1 < HEIGHT / SIZE && PIECES_A[piece.r + 1][piece.c].type == FALLEN) {
                 canFall = false;
                 for (int j = 0; j < pieces.size(); j++) {
-                    pieces.get(i).setType(FALLEN);
+                    pieces.get(j).setType(FALLEN);
+                    PIECES.remove(pieces.get(j));
                 }
                 PIECES.clear();
 
@@ -81,11 +84,18 @@ public class Piece extends Rectangle {
         }
 
             if (canFall == true) {
+                List<Piece> newPieces = new ArrayList<>();
                 pieces.sort(Comparator.comparingInt(value -> value.r));
                 for (int i = pieces.size() - 1; i >= 0; i--) {
                     PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(EMPTY);
-                    pieces.get(i).r++;
-                    PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(PIECE);
+                    Piece temp = new Piece(PIECE, pieces.get(i).r++,pieces.get(i).c);
+                    PIECES_A[temp.r][temp.c].setType(PIECE);
+                    PIECES.remove(pieces.get(i));
+                    newPieces.add(temp);
+                }
+                for (int i = 0; i < newPieces.size() ; i++) {
+                    PIECES.add(newPieces.get(i));
+
                 }
 
             }
@@ -172,7 +182,7 @@ public class Piece extends Rectangle {
     }
 
     public static void generate(){
-            Piece newMiddle = new Piece(PIECE, 2, PIECES_A[0].length / 2);
+            Piece newMiddle =PIECES_A[2][PIECES_A[0].length/2];
             PIECES.add(newMiddle);
             Color newColor = chooseColor();
             CURRENT = newColor;
