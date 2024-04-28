@@ -86,22 +86,23 @@ public class Piece extends Rectangle {
             if (canFall == true) {
                 List<Piece> newPieces = new ArrayList<>();
                 pieces.sort(Comparator.comparingInt(value -> value.r));
+                for (int i = 0; i < newPieces.size() ; i++) {
+                    PIECES.add(newPieces.get(i));
+                    PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(PIECE);
+
+                }
                 for (int i = pieces.size() - 1; i >= 0; i--) {
                     PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(EMPTY);
                     PIECES.remove(pieces.get(i));
                     newPieces.add(PIECES_A[pieces.get(i).r++][pieces.get(i).c]);
                 }
-               for (int i = 0; i < newPieces.size() ; i++) {
-                    PIECES.add(newPieces.get(i));
-                   PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(PIECE);
 
-                }
             }
 
 
         }
 
-    private static void draw(boolean[][] toBoolean) {//zmienia odwróconą tablicę booleanów spowrotem na piecy
+    private static void draw(boolean[][] toBoolean) {//zmienia odwróconą tablicę booleanów spowrotem na piecy - wyclearuj i zapisz
         int minRow = PIECES_A.length;
         int minColumn = PIECES_A[0].length;
         int maxRow = 0;
@@ -240,15 +241,18 @@ public class Piece extends Rectangle {
 
 
     }
-    public static void turnLeft (boolean[][] toBoolean){//obraca w lewo wytworzoną wcześniej tablice booleanów
+    public static void turnRight (boolean[][] toBoolean){//obraca w lewo wytworzoną wcześniej tablice booleanów
         boolean[][] temp = new boolean[toBoolean.length][toBoolean[0].length];
         int i = 0;
+
             for (int r = toBoolean.length - 1; r >= 0; r--) {
                 for (int c = 0; c < toBoolean[0].length; c++) {
-                    temp[r][c] = toBoolean[i][c];
-                    i++;
+                    if( i< toBoolean.length) {
+                    temp[c][r] = toBoolean[i][c];
                 }
             }
+                i++;
+        }
         for (int r = 0; r < toBoolean.length; r++) {
             for (int c = 0; c < toBoolean[0].length; c++) {
                 toBoolean[r][c] = temp[r][c];
@@ -258,6 +262,9 @@ public class Piece extends Rectangle {
         draw(toBoolean);
         }
         public static boolean[][] toBoolean(){ //tworzy boolean[][] na naszym spadającym kawałku
+          for (int r = 0; r < PIECES.size(); r++) {
+                System.out.println(PIECES.get(r).r + PIECES.get(r).c );
+            }
         int minRow = PIECES_A.length;
         int minColumn = PIECES_A[0].length;
         int maxRow = 0;
@@ -281,7 +288,7 @@ public class Piece extends Rectangle {
 
                 }
             }
-            boolean[][] toBoolean = new boolean[maxRow-minRow][maxColum-minColumn];
+            boolean[][] toBoolean = new boolean[5][5];
             for (int r = 0; r < toBoolean.length; r++) {
                 for (int c = 0; c < toBoolean[0].length; c++) {
                     if(PIECES_A[minRow][minColumn].type==PIECE){
@@ -290,10 +297,11 @@ public class Piece extends Rectangle {
                     else{
                         toBoolean[r][c] = false;
                     }
-                    minRow++;
-                    minColumn++;
+
                 }
             }
+            minRow++;
+            minColumn++;
             return toBoolean;
         }
     }

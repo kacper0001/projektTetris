@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,6 +29,13 @@ public class Main extends Application {
     public static List<Piece> PIECES = new ArrayList<>();
 
     public static Type CURRENT_TYPE = EMPTY;
+    boolean [][] test= {
+            {true,false,false,false},
+            {true,true,false,false},
+            {true,true,false,false},
+            {false,false,false,false},
+
+    };
 
 
     public static void main(String[] args) {
@@ -71,8 +79,11 @@ public class Main extends Application {
             if (event.getCode()==KeyCode.LEFT){
                 moveLeft(PIECES);
             }
-            if (event.getCode()==KeyCode.A){
-                turnLeft(toBoolean());
+            if (event.getCode()==KeyCode.D){
+
+                turnRight(test);
+                turnRight(toBoolean());
+                System.out.println(Arrays.deepToString(test));
             }
 
         });
