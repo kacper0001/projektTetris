@@ -86,15 +86,21 @@ public class Piece extends Rectangle {
             if (canFall == true) {
                 List<Piece> newPieces = new ArrayList<>();
                 pieces.sort(Comparator.comparingInt(value -> value.r));
+                pieces.sort(Comparator.comparingInt(value -> value.c));
+                for (int i = 0; i < PIECES.size() ; i++) {
+                    newPieces.add(PIECES.get(i));
+                    newPieces.get(i).r++;
+                }
+                PIECES.clear();
+                System.out.println(newPieces.size());
                 for (int i = 0; i < newPieces.size() ; i++) {
                     PIECES.add(newPieces.get(i));
-                    PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(PIECE);
+                    PIECES.get(i).setType(PIECE);
 
                 }
                 for (int i = pieces.size() - 1; i >= 0; i--) {
-                    PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(EMPTY);
-                    PIECES.remove(pieces.get(i));
-                    newPieces.add(PIECES_A[pieces.get(i).r++][pieces.get(i).c]);
+                    pieces.get(i).setType(EMPTY);
+
                 }
 
             }

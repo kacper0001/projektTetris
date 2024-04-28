@@ -63,7 +63,7 @@ public class Main extends Application {
        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(300),event -> {
 
            if(PIECES.isEmpty()!= true){
-              //Piece.moveDown(PIECES);
+              Piece.moveDown(PIECES);
           }
            else {
                generate();
