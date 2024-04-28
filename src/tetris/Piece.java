@@ -58,7 +58,7 @@ public class Piece extends Rectangle {
         }
     }
 
-    public static void moveDown(List<Piece> pieces) {
+    public static void moveDown(List<Piece> pieces) {//ruch w dół
         boolean canFall = true;
         for (int i = 0; i < pieces.size(); i++) {
             Piece piece = pieces.get(i);
@@ -88,26 +88,76 @@ public class Piece extends Rectangle {
                 pieces.sort(Comparator.comparingInt(value -> value.r));
                 for (int i = pieces.size() - 1; i >= 0; i--) {
                     PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(EMPTY);
-                    Piece temp = new Piece(PIECE, pieces.get(i).r++,pieces.get(i).c);
-                    PIECES_A[temp.r][temp.c].setType(PIECE);
                     PIECES.remove(pieces.get(i));
-                    newPieces.add(temp);
+                    newPieces.add(PIECES_A[pieces.get(i).r++][pieces.get(i).c]);
                 }
-                for (int i = 0; i < newPieces.size() ; i++) {
+               for (int i = 0; i < newPieces.size() ; i++) {
                     PIECES.add(newPieces.get(i));
+                   PIECES_A[pieces.get(i).r][pieces.get(i).c].setType(PIECE);
 
                 }
-
             }
 
 
         }
 
-    private static void draw(List<Piece> pieces) {
-        for (int i = 0; i < pieces.size(); i++) {
-            pieces.get(i).setFill(CURRENT);
+    private static void draw(boolean[][] toBoolean) {//zmienia odwróconą tablicę booleanów spowrotem na piecy
+        int minRow = PIECES_A.length;
+        int minColumn = PIECES_A[0].length;
+        int maxRow = 0;
+        int maxColum =0;
+        for (int r = 0; r < PIECES_A.length; r++) {
+            for (int c = 0; c < PIECES_A[0].length; c++) {
+                if(PIECES_A[r][c].type == PIECE){
+                    if(r<minRow){
+                        minRow=r;
+                    }
+                    if(c<minColumn){
+                        minColumn= c;
+                    }
+                    if(r>maxRow){
+                        maxRow=r;
+                    }
+                    if(c>maxColum){
+                        maxColum=c;
+                    }
+                }
+
+            }
+        }
+        for (int r = 0; r < toBoolean.length; r++) {
+            for (int c = 0; c < toBoolean[0].length; c++) {
+                if(toBoolean[r][c] == true){
+                    PIECES_A[minRow][minColumn].setType(PIECE);
+                    int count =0;
+                    for (int i = 0; i < PIECES.size(); i++) {
+                        if(PIECES.get(i) == PIECES_A[minRow][minColumn]){
+                            count++;
+                        }
+                    }
+                    if(count ==0) {
+                        PIECES.add(PIECES_A[minRow][minColumn]);
+                    }
+                }
+                else {
+                    PIECES_A[minRow][minColumn].setType(EMPTY);
+                    int count =0;
+                    for (int i = 0; i < PIECES.size(); i++) {
+                        if(PIECES.get(i) == PIECES_A[minRow][minColumn]){
+                            count++;
+                        }
+                    }
+                    if(count !=0) {
+                        PIECES.remove(PIECES_A[minRow][minColumn]);
+                    }
+                }
+
+            }
 
         }
+        minColumn++;
+        minRow++;
+
     }
 
     static Color chooseColor() { //wybiera kolor
@@ -127,7 +177,7 @@ public class Piece extends Rectangle {
     }
 
 
-    public static void moveLeft(List<Piece> pieces) {
+    public static void moveLeft(List<Piece> pieces) {//ruch w lewo
         boolean canMove = true;
 
         for (int i = 0; i < pieces.size(); i++) {
@@ -155,7 +205,7 @@ public class Piece extends Rectangle {
 
     }
 
-    public static void moveRight(List<Piece> pieces) {
+    public static void moveRight(List<Piece> pieces) {//ruch w prawo
         boolean canMove = true;
 
         for (int i = 0; i < pieces.size(); i++) {
@@ -181,16 +231,73 @@ public class Piece extends Rectangle {
 
     }
 
-    public static void generate(){
+    public static void generate(){//generowanie spadającego kawałka
             Piece newMiddle =PIECES_A[2][PIECES_A[0].length/2];
             PIECES.add(newMiddle);
             Color newColor = chooseColor();
             CURRENT = newColor;
-            Piece.create(newMiddle, CURRENT, 4);
+            Piece.create(PIECES_A[2][PIECES_A[0].length/2], CURRENT, 4);
 
 
     }
-}
+    public static void turnLeft (boolean[][] toBoolean){//obraca w lewo wytworzoną wcześniej tablice booleanów
+        boolean[][] temp = new boolean[toBoolean.length][toBoolean[0].length];
+        int i = 0;
+            for (int r = toBoolean.length - 1; r >= 0; r--) {
+                for (int c = 0; c < toBoolean[0].length; c++) {
+                    temp[r][c] = toBoolean[i][c];
+                    i++;
+                }
+            }
+        for (int r = 0; r < toBoolean.length; r++) {
+            for (int c = 0; c < toBoolean[0].length; c++) {
+                toBoolean[r][c] = temp[r][c];
+
+            }
+        }
+        draw(toBoolean);
+        }
+        public static boolean[][] toBoolean(){ //tworzy boolean[][] na naszym spadającym kawałku
+        int minRow = PIECES_A.length;
+        int minColumn = PIECES_A[0].length;
+        int maxRow = 0;
+        int maxColum =0;
+            for (int r = 0; r < PIECES_A.length; r++) {
+                for (int c = 0; c < PIECES_A[0].length; c++) {
+                    if(PIECES_A[r][c].type == PIECE){
+                        if(r<minRow){
+                            minRow=r;
+                        }
+                        if(c<minColumn){
+                            minColumn= c;
+                        }
+                        if(r>maxRow){
+                            maxRow=r;
+                        }
+                        if(c>maxColum){
+                            maxColum=c;
+                        }
+                    }
+
+                }
+            }
+            boolean[][] toBoolean = new boolean[maxRow-minRow][maxColum-minColumn];
+            for (int r = 0; r < toBoolean.length; r++) {
+                for (int c = 0; c < toBoolean[0].length; c++) {
+                    if(PIECES_A[minRow][minColumn].type==PIECE){
+                        toBoolean[r][c] = true;
+                    }
+                    else{
+                        toBoolean[r][c] = false;
+                    }
+                    minRow++;
+                    minColumn++;
+                }
+            }
+            return toBoolean;
+        }
+    }
+
 
 
 

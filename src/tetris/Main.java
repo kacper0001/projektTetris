@@ -55,7 +55,7 @@ public class Main extends Application {
        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(300),event -> {
 
            if(PIECES.isEmpty()!= true){
-              Piece.moveDown(PIECES);
+              //Piece.moveDown(PIECES);
           }
            else {
                generate();
@@ -70,6 +70,9 @@ public class Main extends Application {
             }
             if (event.getCode()==KeyCode.LEFT){
                 moveLeft(PIECES);
+            }
+            if (event.getCode()==KeyCode.A){
+                turnLeft(toBoolean());
             }
 
         });
